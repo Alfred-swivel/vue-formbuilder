@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'DatetimePicker',
+    type: 'DatetimePicker',
     data() {
     	return {
     		date: ''

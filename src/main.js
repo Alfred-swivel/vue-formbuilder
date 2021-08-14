@@ -25,7 +25,8 @@ Vue.use(Animate)
 // Lodash
 // ----------------
 import VueLodash from 'vue-lodash'
-Vue.use(VueLodash)
+import lodash from 'lodash'
+Vue.use(VueLodash, { lodash: lodash })
 
 // ================
 // Use Vue Router
@@ -48,16 +49,22 @@ import store from './store/store'
 Vue.use(VueStash)
 
 
+// import Tiptap from '@tiptap/vue-3'
+// import StarterKit from '@tiptap/starter-kit'
+// Vue.use(Tiptap)
+// Vue.use(StarterKit)
+
+
 
 Vue.config.productionTip = false
 
 var vm = new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  data: { store },
-  template: '<App/>',
-  render: h => h(App)
+    el: '#app',
+    router,
+    components: { App },
+    data: { store },
+    template: '<App/>',
+    render: h => h(App)
 }).$mount('#app')
 
 global.vm = vm;

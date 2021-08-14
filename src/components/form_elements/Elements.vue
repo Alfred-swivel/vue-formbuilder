@@ -4,7 +4,7 @@
       <draggable :list="fields"
                  :clone="clone"
                  class="dragArea"
-                 :options="dropElementOptions"
+                 :options="dropElementOptions"                
                  @start="onStart">
         <el-col :span="12" 
                 :class="{ 'is-disabled': checkStopDragCondition(field) }"
@@ -12,7 +12,8 @@
                 :key="index">
           <el-button class="button__sidebar" 
                      type="info">
-            {{ field.text }}
+            <!-- {{ field.text }} -->
+            {{ field.name }}
           </el-button>
         </el-col>
       </draggable>
@@ -26,68 +27,40 @@
 
   export default {
     name: 'Elements',
-    store: ['forms', 'activeForm'],
+    store: ['form', 'pages', 'activeForm'],
     components: { draggable },
     data() {
       return {
         fields: FormBuilder.$data.fields,
-        dropElementOptions: FormBuilder.$data.dropElementOptions
+        dropElementOptions: FormBuilder.$data.dropElementOptions,
       };
     },
     methods: {
       clone(field){
-        var newField  = { 
-          fieldType: field.name,
-          isUnique: field.isUnique 
-        } 
+        // return clonedField;
+        var clonedField = _.cloneDeep(field);
+        clonedField.id = vm.$store.form.fieldAutoId;
+        vm.$store.form.fieldAutoId++;
+        vm.$store.activeForm = clonedField;
 
-        // Show placeholder
-        if (field.isPlaceholderVisible){
-          newField ["isPlaceholderVisible"] = false;
-          newField ["placeholder"] = 'Input your text here...';
-        }
-
-        // Decide whether display label, required field, helpblock
-        if (field.group == "form"){
-          newField ["label"] = "Enter your field label";
-          newField ["isHelpBlockVisible"] =  false;
-          newField ["helpBlockText"] = 'Please input your helpblock here...';
-          newField ["isRequired"] = false;
-        }
-
-        if (field.group == "button"){
-          newField ["buttonText"] = "Submit your form";
-        }
-
-        if (field.name == "TextEditor"){
-          newField ["fieldText"] = "Start typing...";
-        }
-
-
-        // Add dummy options for loading the radio/checkbox
-        if (field.hasOptions){
-          newField ["options"] = [
-            { optionLabel: "Option 1", optionValue: "Option 1" },
-            { optionLabel: "Option 2", optionValue: "Option 2" }
-          ]
-        }
-
-        return newField;
+        return clonedField;
       },
       onStart(){
         // console.log("start liao")
       },
       checkStopDragCondition(field){
-        var form = this.forms,
-            formArray = [];
+        // var form = this.forms,
+        //     formArray = [];
 
-        for (var key in form) {
-          formArray.push(form[key]['fieldType'])
-        }
+        // for (var key in form) {
+        //   formArray.push(form[key]['type'])
+        // }
 
-        // Check if the fieldname exist in formArray
-        // And when the field.isUnique too
-        return _.includes(formArray, field.name) && field.isUnique;
+        // // Check if the fieldname exist in formArray
+        // // And when the field.isUnique too
+        // return _.includes(formArray, field.name) && field.isUnique;
+
+        return false;
       }
     }
   }
@@ -97,6 +70,7 @@
   .button__sidebar {
     width: 100%;
     margin-bottom: 10px;
+    background: lightslategray;
 
     .is-disabled & {
       opacity: 0.4;
@@ -104,7 +78,7 @@
   }
   
   // Display this ghost in <main> only
-  .wrapper--forms .sortable__ghost {
+  .wrapper--forms-area .sortable__ghost {
     position: relative;
     width: 100%;
     border-bottom: 2px solid black;

@@ -1,11 +1,18 @@
 <template>
   <div>
+    <!-- <el-radio v-model="radio"  
+    			    v-for="(item, index) in currentField.options"
+        		  :key="item.optionLabel + item.optionValue + currentField.id.toString()"
+        		  :label="index">
+      {{ item.optionValue }}
+    </el-radio> -->
+
     <el-radio v-model="radio"  
     			    v-for="(item, index) in currentField.options"
-        		  :key="item.optionValue"
-        		  :label="item.optionLabel">
-      {{ item.optionValue }}
-     </el-radio>
+        		  :key="currentField.id.toString() + item + index.toString()"
+        		  :label="index">
+      {{ item }}
+    </el-radio>
   </div>
 </template>
 
